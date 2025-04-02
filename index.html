@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #eef2f3;
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        .screen {
+            width: 100%;
+            height: 60px;
+            text-align: right;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .buttons button {
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background: #e0e0e0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .buttons button:hover {
+            background: #d6d6d6;
+        }
+        .buttons button.operator {
+            background: #f39c12;
+            color: white;
+        }
+        .buttons button.operator:hover {
+            background: #e67e22;
+        }
+        .buttons button.equal {
+            background: #2ecc71;
+            color: white;
+            grid-column: span 2;
+        }
+        .buttons button.equal:hover {
+            background: #27ae60;
+        }
+        .buttons button.clear {
+            background: #e74c3c;
+            color: white;
+        }
+        .buttons button.clear:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="screen" id="screen" disabled>
+        <div class="buttons">
+            <button class="clear" onclick="clearScreen()">C</button>
+            <button onclick="appendToScreen('7')">7</button>
+            <button onclick="appendToScreen('8')">8</button>
+            <button onclick="appendToScreen('9')">9</button>
+            <button class="operator" onclick="appendToScreen('+')">+</button>
+            <button onclick="appendToScreen('4')">4</button>
+            <button onclick="appendToScreen('5')">5</button>
+            <button onclick="appendToScreen('6')">6</button>
+            <button class="operator" onclick="appendToScreen('-')">-</button>
+            <button onclick="appendToScreen('1')">1</button>
+            <button onclick="appendToScreen('2')">2</button>
+            <button onclick="appendToScreen('3')">3</button>
+            <button class="operator" onclick="appendToScreen('*')">×</button>
+            <button onclick="appendToScreen('0')">0</button>
+            <button onclick="appendToScreen('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+            <button class="operator" onclick="appendToScreen('/')">÷</button>
+        </div>
+    </div>
+    <script>
+        function appendToScreen(value) {
+            document.getElementById('screen').value += value;
+        }
+        function clearScreen() {
+            document.getElementById('screen').value = '';
+        }
+        function calculate() {
+            try {
+                document.getElementById('screen').value = eval(document.getElementById('screen').value);
+            } catch {
+                document.getElementById('screen').value = 'Error';
+            }
+        }
+        document.addEventListener('keydown', function(event) {
+            const validKeys = '0123456789+-*/.=BackspaceEnter';
+            if (validKeys.includes(event.key)) {
+                event.preventDefault();
+                if (event.key === 'Enter') {
+                    calculate();
+                } else if (event.key === 'Backspace') {
+                    let screen = document.getElementById('screen');
+                    screen.value = screen.value.slice(0, -1);
+                } else {
+                    appendToScreen(event.key);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
