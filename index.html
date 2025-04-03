@@ -98,33 +98,50 @@
         </div>
     </div>
     <script>
-        function appendToScreen(value) {
-            document.getElementById('screen').value += value;
+    function appendToScreen(value) {
+        let screen = document.getElementById('screen');
+        let currentValue = screen.value;
+        let lastChar = currentValue.slice(-1);
+
+        // Prevent consecutive symbols
+        if ("+-/.".includes(value) && "+-/.".includes(lastChar)) {
+            return;
         }
-        function clearScreen() {
-            document.getElementById('screen').value = '';
+        screen.value += value;
+    }
+
+    function clearScreen() {
+        document.getElementById('screen').value = '';
+    }
+
+    function calculate() {
+        try {
+            document.getElementById('screen').value = eval(document.getElementById('screen').value);
+        } catch {
+            document.getElementById('screen').value = 'Error';
         }
-        function calculate() {
-            try {
-                document.getElementById('screen').value = eval(document.getElementById('screen').value);
-            } catch {
-                document.getElementById('screen').value = 'Error';
-            }
-        }
-        document.addEventListener('keydown', function(event) {
-            const validKeys = '0123456789+-*/.=BackspaceEnter';
-            if (validKeys.includes(event.key)) {
-                event.preventDefault();
-                if (event.key === 'Enter') {
-                    calculate();
-                } else if (event.key === 'Backspace') {
-                    let screen = document.getElementById('screen');
-                    screen.value = screen.value.slice(0, -1);
-                } else {
-                    appendToScreen(event.key);
+    }
+
+    document.addEventListener('keydown', function(event) {
+        const validKeys = '0123456789+-*/.=BackspaceEnter';
+        if (validKeys.includes(event.key)) {
+            event.preventDefault();
+            let screen = document.getElementById('screen');
+            let lastChar = screen.value.slice(-1);
+
+            if (event.key === 'Enter') {
+                calculate();
+            } else if (event.key === 'Backspace') {
+                screen.value = screen.value.slice(0, -1);
+            } else {
+                // Prevent consecutive symbols
+                if ("+-/.".includes(event.key) && "+-/.".includes(lastChar)) {
+                    return;
                 }
+                appendToScreen(event.key);
             }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>
